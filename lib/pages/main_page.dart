@@ -1,5 +1,7 @@
 import 'package:code_language/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:code_language/providers/code_provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -19,7 +21,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final code = Provider.of<CodeProvider>(context);
     double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         //automaticallyImplyLeading: false,
@@ -28,51 +32,48 @@ class _MainPageState extends State<MainPage> {
         title: Row(
           //mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const <Widget>[
-            Text('Decode'),
+          children: <Widget>[
+            SizedBox(
+                width: 80,
+                height: 30,
+                child: Text(code.isEnglish ? 'English' : 'Coded')),
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.swap_horiz,
                 size: 30,
                 color: Colors.white,
               ),
-              onPressed: null,
+              onPressed: () {
+                code.swapLanguage();
+              },
             ),
-            Text('Encode'),
+            SizedBox(
+                width: 80,
+                height: 30,
+                child: Text(code.isEnglish ? 'Coded' : 'English')),
           ],
         ),
       ),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
       body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.all(8),
-
             /// UPPER CONTAINER
             child: Container(
               height: screenHeight * 0.40,
               color: Colors.white,
-              child: Row(
-                children: const [
-                  Flexible(child: upperTextField()),
-                  iconColumnWithoutText(),
-                ],
-              ),
+              child: const UpperTextField(),
+
             ),
           ),
-
           ///2ND CONTAINER
           Padding(
             padding: const EdgeInsets.all(8),
             child: Container(
               height: screenHeight * 0.42,
               color: Colors.white,
-              child: Row(
-                children: const [
-                  Flexible(child: bottomTextField()),
-                  iconColumforResult(),
-                ],
-              ),
+              child:  BottomTextField(),
             ),
           ),
         ],

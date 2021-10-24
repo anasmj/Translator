@@ -1,11 +1,11 @@
+import 'package:code_language/providers/code_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: Column(
         children: [
@@ -40,12 +40,14 @@ class AppDrawer extends StatelessWidget {
     );
   }
 }
-class PictureContainer extends StatelessWidget{
-  Widget build( BuildContext context){
+
+class PictureContainer extends StatelessWidget {
+  Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.only(top: screenHeight*0.07,left: screenHeight*0.02),
+      padding:
+          EdgeInsets.only(top: screenHeight * 0.07, left: screenHeight * 0.02),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,98 +68,119 @@ class PictureContainer extends StatelessWidget{
               ),
             ),
           ),
-          const Text('Talha Ash Sharke', style: TextStyle(color: Colors.white),),
+          const Text(
+            'Talha Ash Sharke',
+            style: TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );
   }
 }
 
-class upperTextField extends StatefulWidget {
-  const upperTextField({Key? key}) : super(key: key);
-
+class UpperTextField extends StatefulWidget {
+  const UpperTextField({Key? key}) : super(key: key);
   @override
-  State<upperTextField> createState() => _upperTextFieldState();
+  State<UpperTextField> createState() => UpperTextFieldState();
 }
 
-class _upperTextFieldState extends State<upperTextField> {
+class UpperTextFieldState extends State<UpperTextField> {
+  TextEditingController startTextController = TextEditingController();
+  TextEditingController targetTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final code = Provider.of<CodeProvider>(context);
+    //code.startText = startTextController.text;
+    // if(code.startText.isEmpty) => setState((){startTextController.text = ''});
+    if(code.isClear){
+      startTextController.clear();
+      code.isClear = false;
+    }
     return TextFormField(
+      controller: startTextController,
+      onChanged: (value) {
+        value.isNotEmpty ? code.activateTextField() : code.deactivateTextField();
+      },
       style: const TextStyle(
         fontSize: 22,
       ),
       maxLines: 16,
       cursorColor: Colors.blue,
       cursorHeight: 30,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.only(top: 10, left: 8),
+      decoration:  InputDecoration(
+        suffixIcon: startTextController.text.isEmpty ?  iconColumnWithoutText():  iconColumnWithText(),
+        contentPadding: const EdgeInsets.only(top: 10, left: 10),
         border: InputBorder.none,
         hintText: "Text",
         //filled: true,
-        hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+        hintStyle: const TextStyle(fontSize: 20, color: Colors.grey),
       ),
     );
   }
-}
-
-class bottomTextField extends StatelessWidget {
-  const bottomTextField({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      enabled: false,
-      style: const TextStyle(
-        fontSize: 22,
-      ),
-      maxLines: 16,
-      cursorColor: Colors.blue,
-      cursorHeight: 30,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.only(top: 10, left: 8),
-        border: InputBorder.none,
-        //filled: true,
-        hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
-      ),
+  Widget iconColumnWithoutText(){
+    return Column(
+      children: [
+        IconButton(
+          onPressed: () {
+            print('paste ');
+          },
+          icon: const Icon(Icons.paste_rounded),
+        ),
+        IconButton(
+          onPressed: () {
+            print('voice ');
+          },
+          icon: const Icon(
+            Icons.keyboard_voice,
+          ),
+          iconSize: 30,
+        ),
+      ],
     );
   }
-}
-
-class iconColumnWithText extends StatelessWidget {
-  const iconColumnWithText({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget iconColumnWithText(){
+    final code = Provider.of<CodeProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: const [
+      children: [
         IconButton(
-          onPressed: null,
-          icon: Icon(
+          onPressed: () {
+            code.clearText();
+          },
+          icon: const Icon(
             Icons.cancel,
           ),
           iconSize: 30,
         ),
         IconButton(
-            onPressed: null,
-            icon: Icon(
+            onPressed: () {
+              print('voice');
+            },
+            icon: const Icon(
               Icons.keyboard_voice,
             ),
             iconSize: 30),
         IconButton(
-          onPressed: null,
-          icon: Icon(Icons.paste_rounded),
+          onPressed:() {
+            print('paste');
+          },
+          icon: const Icon(Icons.paste_rounded),
         ),
         IconButton(
-          onPressed: null,
-          icon: Icon(
+          onPressed: () {
+            print('copy');
+          },
+          icon: const Icon(
             Icons.copy_outlined,
           ),
         ),
         IconButton(
-          onPressed: null,
-          icon: Icon(
+          onPressed: () {
+            print('enter');
+            code.targetText = startTextController.text;
+          },
+          icon: const Icon(
             Icons.subdirectory_arrow_left,
           ),
         ),
@@ -166,43 +189,55 @@ class iconColumnWithText extends StatelessWidget {
   }
 }
 
-class iconColumnWithoutText extends StatelessWidget {
-  const iconColumnWithoutText({Key? key}) : super(key: key);
-
+class BottomTextField extends StatefulWidget {
+  BottomTextField({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        IconButton(
-          onPressed: null,
-          icon: Icon(Icons.paste_rounded),
-        ),
-        IconButton(
-          onPressed: null,
-          icon: Icon(
-            Icons.keyboard_voice,
-          ),
-          iconSize: 30,
-        ),
-      ],
-    );
-  }
+  State<BottomTextField> createState() => _BottomTextFieldState();
 }
 
-class iconColumforResult extends StatelessWidget {
-  const iconColumforResult({Key? key}) : super(key: key);
-
+class _BottomTextFieldState extends State<BottomTextField> {
+  TextEditingController targetTextController = TextEditingController();
+  //TODO fix : build function running only when keyboard is minimized
+  // result is not getting in real time
   @override
   Widget build(BuildContext context) {
+    final code = Provider.of<CodeProvider>(context);
+
+    targetTextController.text = code.targetText.isNotEmpty? code.targetText: '';
+    return TextFormField(
+      controller: targetTextController,
+      enabled: false,
+      style: const TextStyle(
+        fontSize: 22,
+      ),
+      maxLines: 16,
+      cursorColor: Colors.blue,
+      cursorHeight: 30,
+      decoration:  InputDecoration(
+        //TODO fix target text controller and it's icons
+        suffixIcon: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
+        contentPadding: const EdgeInsets.only(top: 10, left: 10),
+        border: InputBorder.none,
+        //filled: true,
+        hintStyle: const TextStyle(fontSize: 20, color: Colors.grey),
+      ),
+    );
+  }
+
+  Widget iconColumnForResult(){
     return Column(
-      children: const [
+      children:  [
         IconButton(
-          onPressed: null,
-          icon: Icon(Icons.copy_outlined),
+          onPressed: () {
+            print('copy');
+          },
+          icon: const Icon(Icons.copy_outlined),
         ),
         IconButton(
-          onPressed: null,
-          icon: Icon(
+          onPressed: () {
+            print('share');
+          },
+          icon: const Icon(
             Icons.share,
           ),
           iconSize: 25,
