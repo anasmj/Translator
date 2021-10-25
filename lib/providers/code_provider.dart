@@ -7,13 +7,12 @@ class CodeProvider with ChangeNotifier {
   bool _isClear = false;
   String _startText = ' ';
   String _targetText = ' ';
-
-
+  int _interval = 5;
 
   bool get isClear => _isClear;
   bool get activeTextField => _activeTextField;
   String get targetText => _targetText;
-
+  int get interval => _interval;
 
   set targetText(String value) {
     _targetText = value;
@@ -24,6 +23,10 @@ class CodeProvider with ChangeNotifier {
   set startText(String value){
     _startText = value;
     print('text in provider $value') ;
+  }
+  void setInterval (double value){
+    _interval = value.toInt();
+    print('interval set to $_interval');
   }
 
   void clearText(){

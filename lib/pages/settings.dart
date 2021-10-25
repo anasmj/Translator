@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:code_language/widgets/slider_dialog.dart';
 
 class Settings extends StatefulWidget{
   const Settings({Key? key}) : super(key: key);
@@ -21,13 +23,19 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const ListTile(
-              title: Text('Choose ASCII Interval',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-              subtitle:Text('The number you want to add/substruct with your text'),
-              trailing: Icon(Icons.arrow_forward_ios),
+             ListTile(
+              onTap: (){
+                showDialog(
+                  context: context,
+                  builder: (_) => SliderDialog(),
+                );
+              },
+              title: const Text('Choose ASCII Interval',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+              subtitle:const Text('The number you want to add/substruct with your text',style: TextStyle(fontSize:15 ),),
+              trailing: const Icon(Icons.arrow_forward_ios),
             ),
             CheckboxListTile(
-              title: const Text('Convert full Stop'),
+              title: getTitle('Convert full Stop'),
               controlAffinity: ListTileControlAffinity.trailing,
               value: _fullStopCheck,
               onChanged: (bool? value) {
@@ -40,7 +48,7 @@ class _SettingsState extends State<Settings> {
               // checkColor:,
             ),
             CheckboxListTile(
-              title: const Text('Convert space bar'),
+              title: getTitle('Include space bar'),
               controlAffinity: ListTileControlAffinity.trailing,
               value: _spaceBarCheck,
               onChanged: (bool? value) {
@@ -51,7 +59,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             CheckboxListTile(
-              title: const Text('Convert comma'),
+              title: getTitle('Include comma'),
               controlAffinity: ListTileControlAffinity.trailing,
               value: _commaCheck,
               onChanged: (bool? value) {
@@ -61,8 +69,9 @@ class _SettingsState extends State<Settings> {
                 print('value');
               },
             ),
+            //getOtherCharacterCheckbox('Include other characters', _otherSpecialCharacterCheck),
             CheckboxListTile(
-              title: const Text('Convert other special characters'),
+              title: getTitle('Include other special characters'),
               controlAffinity: ListTileControlAffinity.trailing,
               value: _otherSpecialCharacterCheck,
               onChanged: (bool? value) {
@@ -72,10 +81,15 @@ class _SettingsState extends State<Settings> {
                 });
               },
             ),
-
           ],
         ),
       ),
+    );
+  }
+  Widget getTitle(String value){
+    return Text(
+      value,
+      style: const TextStyle(fontSize: 18),
     );
   }
 }

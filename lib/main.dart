@@ -1,5 +1,5 @@
 import 'package:code_language/pages/about_ascii.dart';
-import 'package:code_language/pages/ascii_map.dart';
+import 'package:code_language/pages/ascii_table.dart';
 import 'package:code_language/pages/privacy_policy.dart';
 import 'package:code_language/pages/rate.dart';
 import 'package:code_language/pages/settings.dart';
@@ -33,7 +33,7 @@ class Coder extends StatelessWidget{
       routes: {
         '/main_page': (context) => const MainPage(),
         '/settings': (context) => const Settings(),
-        '/ascii_map': (context) => const AsciiMap(),
+        '/ascii_table': (context) => const AsciiTable(),
         '/rate': (context) => const Rate(),
         '/privacy_policy': (context) => const PrivacyPolicy(),
         '/about_ascii': (context) => const AboutAscii(),

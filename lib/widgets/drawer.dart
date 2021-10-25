@@ -34,7 +34,7 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushNamed(context, "/ascii_map");
             },
             leading: const Icon(Icons.map),
-            title: const Text('ASCII Map',style: TextStyle(fontSize: 16),),
+            title: const Text('ASCII table',style: TextStyle(fontSize: 16),),
           ),
            ListTile(
             onTap: (){

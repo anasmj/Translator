@@ -2,6 +2,7 @@ import 'package:code_language/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:code_language/providers/code_provider.dart';
+import 'package:clipboard/clipboard.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -137,7 +138,11 @@ class _MainPageState extends State<MainPage> {
     return Column(
       children: [
         IconButton(
-          onPressed: () {
+          onPressed: ()async {
+            final value = await FlutterClipboard.paste();
+            //startTextController.selection = TextSelection.fromPosition(TextPosition(offset: startTextController.text.length));
+
+            startTextController.text = value;
             print('paste ');
           },
           icon: const Icon(Icons.paste_rounded),
@@ -178,14 +183,21 @@ class _MainPageState extends State<MainPage> {
             ),
             iconSize: 30),
         IconButton(
-          onPressed:() {
+          onPressed:() async {
+            //TODO fix bug on paste
+
             print('paste');
+            final value = await FlutterClipboard.paste();
+            startTextController.text = value;
           },
           icon: const Icon(Icons.paste_rounded),
         ),
         IconButton(
-          onPressed: () {
-            print('copy');
+          onPressed: () async {
+            //TODO notify users
+            await FlutterClipboard.copy(startTextController.text);
+            //Scaffold.of(context).showSnackBar(SnackBar(content: Text('Copied'),));
+            print('copied');
           },
           icon: const Icon(
             Icons.copy_outlined,

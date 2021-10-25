@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-class AsciiMap extends StatelessWidget{
-  const AsciiMap({Key? key}): super(key: key);
+class AsciiTable extends StatelessWidget{
+  const AsciiTable({Key? key}): super(key: key);
   @override
   Widget build (BuildContext context){
     return Scaffold(
