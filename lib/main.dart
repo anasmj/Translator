@@ -37,8 +37,6 @@ class Coder extends StatelessWidget{
         '/rate': (context) => const Rate(),
         '/privacy_policy': (context) => const PrivacyPolicy(),
         '/about_ascii': (context) => const AboutAscii(),
-
-
       },
     );
   }

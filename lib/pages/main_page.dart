@@ -1,5 +1,6 @@
 import 'package:code_language/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:code_language/providers/code_provider.dart';
 import 'package:clipboard/clipboard.dart';
@@ -123,7 +124,6 @@ class _MainPageState extends State<MainPage> {
       cursorColor: Colors.blue,
       cursorHeight: 30,
       decoration:  InputDecoration(
-        //TODO fix target text controller and it's icons
         suffixIcon: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
         contentPadding: const EdgeInsets.only(top: 10, left: 10),
         border: InputBorder.none,
@@ -143,13 +143,11 @@ class _MainPageState extends State<MainPage> {
             //startTextController.selection = TextSelection.fromPosition(TextPosition(offset: startTextController.text.length));
 
             startTextController.text = value;
-            print('paste ');
           },
           icon: const Icon(Icons.paste_rounded),
         ),
         IconButton(
           onPressed: () {
-            print('voice ');
           },
           icon: const Icon(
             Icons.keyboard_voice,
@@ -176,7 +174,6 @@ class _MainPageState extends State<MainPage> {
         ),
         IconButton(
             onPressed: () {
-              print('voice');
             },
             icon: const Icon(
               Icons.keyboard_voice,
@@ -185,27 +182,24 @@ class _MainPageState extends State<MainPage> {
         IconButton(
           onPressed:() async {
             //TODO fix bug on paste
-
-            print('paste');
             final value = await FlutterClipboard.paste();
             startTextController.text = value;
           },
           icon: const Icon(Icons.paste_rounded),
         ),
-        IconButton(
-          onPressed: () async {
-            //TODO notify users
-            await FlutterClipboard.copy(startTextController.text);
-            //Scaffold.of(context).showSnackBar(SnackBar(content: Text('Copied'),));
-            print('copied');
-          },
-          icon: const Icon(
-            Icons.copy_outlined,
+        Builder(
+          builder: (context) =>IconButton(
+            onPressed: () async {
+              await FlutterClipboard.copy(startTextController.text);
+              toast('copied');
+            },
+            icon: const Icon(
+              Icons.copy_outlined,
+            ),
           ),
         ),
         IconButton(
           onPressed: () {
-            print('enter');
             code.targetText = startTextController.text;
             targetTextController.text = startTextController.text;
             FocusScope.of(context).unfocus();
@@ -222,13 +216,11 @@ class _MainPageState extends State<MainPage> {
       children:  [
         IconButton(
           onPressed: () {
-            print('copy');
           },
           icon: const Icon(Icons.copy_outlined),
         ),
         IconButton(
           onPressed: () {
-            print('share');
           },
           icon: const Icon(
             Icons.share,
@@ -238,4 +230,11 @@ class _MainPageState extends State<MainPage> {
       ],
     );
   }
+
+  void toast(String message)=> Fluttertoast.showToast(
+    msg: message,
+    gravity: ToastGravity.CENTER,
+    backgroundColor: Colors.white,
+    textColor: Colors.black,
+  );
 }

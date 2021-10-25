@@ -35,22 +35,27 @@ class SliderDialogState extends State<SliderDialog> {
               Navigator.of(context).pop();
             },
             child: const Text('Cancel')),
-        TextButton(
-          child: const Text('Set'),
-          onPressed: () {
-            Provider.of<CodeProvider>(context, listen: false)
-                .setInterval(IntervalSliderState.sliderInterval);
-            Navigator.of(context).pop();
-            //TODO: notify User
-          },
+        Builder(
+          builder: (context) {
+            return TextButton(
+              child: const Text('Set'),
+              onPressed: () {
+                Provider.of<CodeProvider>(context, listen: false)
+                    .setInterval(IntervalSliderState.sliderInterval);
+                Navigator.of(context).pop();
+                toast('value set to ${IntervalSliderState.sliderInterval.toInt()}');
+              },
+            );
+          }
         ),
       ],
     );
   }
-  void showToast()=> Fluttertoast.showToast(
-    msg: 'toast',
-    fontSize: 18,
-    gravity:  ToastGravity.CENTER,
+  void toast(String message)=> Fluttertoast.showToast(
+    msg: message,
+    gravity: ToastGravity.CENTER,
+    backgroundColor: Colors.white,
+    textColor: Colors.black,
   );
 
 }

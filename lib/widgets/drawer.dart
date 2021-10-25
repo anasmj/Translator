@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:code_language/widgets/picture_container.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -59,7 +60,7 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: (){
-              //Navigator.pushNamed(context, "/privacy_policy");
+              callDeveloper();
             },
             leading: const Icon(Icons.face_rounded),
             title: const Text('Thank me',style: TextStyle(fontSize: 16),),
@@ -67,5 +68,9 @@ class AppDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+  Future callDeveloper() async {
+    const String number = '+8801627862143';
+    await launch('tel:$number');
   }
 }
