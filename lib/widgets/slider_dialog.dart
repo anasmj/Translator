@@ -19,7 +19,7 @@ class SliderDialogState extends State<SliderDialog> {
       title: Column(
         children: [
           Text(
-            Provider.of<CodeProvider>(context).interval.toString(),
+            Provider.of<CodeProvider>(context).value.toString(),
              //intervalValue.toString(),
             style: const TextStyle(fontSize: 42),
           ),
@@ -41,9 +41,9 @@ class SliderDialogState extends State<SliderDialog> {
               child: const Text('Set'),
               onPressed: () {
                 Provider.of<CodeProvider>(context, listen: false)
-                    .setInterval(IntervalSliderState.sliderInterval);
+                    .setValue(IntervalSliderState.sliderInterval);
                 Navigator.of(context).pop();
-                toast('value set to ${IntervalSliderState.sliderInterval.toInt()}');
+                toast('set to ${IntervalSliderState.sliderInterval.toInt()}');
               },
             );
           }

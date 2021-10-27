@@ -64,12 +64,11 @@ class _MainPageState extends State<MainPage> {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8.0 ),
             /// UPPER CONTAINER
             child: Container(
               height: screenHeight * 0.40,
               color: Colors.white,
-              //TODO:  make icon column out of the text field to stay consistent
               //child: getUpperTextField(),
               child: Stack(
                 children: [
@@ -88,10 +87,9 @@ class _MainPageState extends State<MainPage> {
             child: Container(
               height: screenHeight * 0.42,
               color: Colors.white,
-              //child:  getBottomTextField(),
               child: Stack(
                 children: [
-                  getBottomTextField(),
+                  SingleChildScrollView(child: getBottomTextField()),
                   Align(
                     alignment: Alignment.centerRight,
                     child: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
@@ -106,11 +104,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget getUpperTextField(){
-    final code = Provider.of<CodeProvider>(context);
     return TextFormField(
       controller: startTextController,
       onChanged: (value) {
-        value.isNotEmpty ? code.activateTextField() : code.deactivateTextField();
+        setState(() {});//brings icon
       },
       style: const TextStyle(
         fontSize: 22,
@@ -119,8 +116,7 @@ class _MainPageState extends State<MainPage> {
       cursorColor: Colors.blue,
       cursorHeight: 30,
       decoration:  const InputDecoration(
-        //suffixIcon: startTextController.text.isEmpty ?  iconColumnWithoutText():  iconColumnWithText(),
-        contentPadding: EdgeInsets.only(top: 10, left: 10,right: 32),
+        contentPadding: EdgeInsets.only(left: 10,right: 32),
         border: InputBorder.none,
         hintText: "Text",
         //filled: true,
@@ -144,7 +140,7 @@ class _MainPageState extends State<MainPage> {
       cursorHeight: 30,
       decoration:  const InputDecoration(
         //suffixIcon: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
-        contentPadding: EdgeInsets.only(top: 10, left: 32),
+        contentPadding: EdgeInsets.only(left: 10, right: 32),
         border: InputBorder.none,
         //filled: true,
         hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
@@ -203,10 +199,7 @@ class _MainPageState extends State<MainPage> {
             iconSize: 30),
         IconButton(
           onPressed:() async {
-            //TODO fix bug: replace existed text with value on clipboard
-            startTextController.selection = TextSelection.fromPosition(TextPosition(offset: startTextController.text.length));// move cursor if there are already some text
-            final value = await FlutterClipboard.paste();
-            startTextController.text = value;
+            startTextController.text = startTextController.text.isEmpty ? await FlutterClipboard.paste() : startTextController.text + await FlutterClipboard.paste();
           },
           icon: const Icon(Icons.paste_rounded),
         ),
@@ -222,9 +215,10 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         IconButton(
-          onPressed: () {
-            code.targetText = startTextController.text;
-            targetTextController.text = startTextController.text;
+          onPressed: ()async {
+            await code.convert(startTextController.text);
+            //code.targetText = startTextController.text;
+            targetTextController.text = code.targetText;
             FocusScope.of(context).unfocus(); //removes keyboard after pressing enter
           },
           icon: const Icon(

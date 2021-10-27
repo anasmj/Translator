@@ -1,19 +1,25 @@
 import 'package:flutter/cupertino.dart';
+import 'package:code_language/model/text_object.dart';
 
 class CodeProvider with ChangeNotifier {
-  bool _isEnglish = true;
-  bool _activeTextField = false;
-  bool get isEnglish => _isEnglish;
-  bool _isClear = false;
+
   String _startText = ' ';
   String _targetText = ' ';
-  int _interval = 5;
+  int _value = 1;
+  final bool _includePoint = false;
+  final bool _includeSpace=false;
+  final bool _includeComma =false;
+  final bool _includeSpecialCharacters = false;
+  bool _toEncode = true;
+  //bool _activeTextField = false;
+  bool get isEnglish => _toEncode;
+  bool _isClear = false;
+
+  //bool get activeTextField => _activeTextField;
+  String get targetText => _targetText;
+  int get value => value;
 
   bool get isClear => _isClear;
-  bool get activeTextField => _activeTextField;
-  String get targetText => _targetText;
-  int get interval => _interval;
-
   set targetText(String value) {
     _targetText = value;
   }
@@ -22,29 +28,33 @@ class CodeProvider with ChangeNotifier {
   }
   set startText(String value){
     _startText = value;
-    print('text in provider $value') ;
-  }
-  void setInterval (double value){
-    _interval = value.toInt();
-    print('interval set to $_interval');
   }
 
+  void setValue (double value){
+    _value = value.toInt();
+  }
   void clearText(){
     _startText = '';
     _targetText ='';
     _isClear = true;
     notifyListeners();
   }
-  void activateTextField(){
-    _activeTextField = true;
-    notifyListeners();
-  }
-  void deactivateTextField(){
-    _activeTextField = false;
-    notifyListeners();
-  }
+  // void activateTextField(){
+  //   _activeTextField = true;
+  //   notifyListeners();
+  // }
+  // void deactivateTextField(){
+  //   _activeTextField = false;
+  //   notifyListeners();
+  // }
   void swapLanguage(){
-    _isEnglish = !_isEnglish;
+    _toEncode = !_toEncode;
+    notifyListeners();
+  }
+
+  Future<void> convert (String text)async {
+    TextObject textObj = TextObject(startText: text, value: _value, toEncode: _toEncode, includePoint: _includePoint, includeSpace: _includeSpace, includeComma: _includeComma,includeSpcialCharacters: _includeSpecialCharacters );
+    targetText = textObj.convertText();
     notifyListeners();
   }
 }
