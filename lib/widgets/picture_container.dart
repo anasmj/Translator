@@ -9,14 +9,16 @@ class PictureContainer extends StatelessWidget {
       EdgeInsets.only(top: screenHeight * 0.07, left: screenHeight * 0.02),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: Colors.orange,
+        children: const [
+          SizedBox(
             width: 50,
             height: 50,
-            child: Text('PIC'),
+            child: Image(image: AssetImage('assets/code.png'),
+              fit: BoxFit.fill,
+            ),
+
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 16, bottom: 4),
             child: Text(
               'ASCII Encoder Decoder',
@@ -27,7 +29,7 @@ class PictureContainer extends StatelessWidget {
               ),
             ),
           ),
-          const Text(
+          Text(
             'Talha Ash Sharke',
             style: TextStyle(color: Colors.white),
           ),

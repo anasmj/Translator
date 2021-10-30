@@ -40,7 +40,7 @@ class _SettingsState extends State<Settings> {
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
               CheckboxListTile(
-                title: getTitle('Convert full Stop'),
+                title: getTitle('Include full Stop'),
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: _fullStopCheck,
                 onChanged: (bool? value) {

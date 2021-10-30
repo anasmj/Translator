@@ -17,6 +17,9 @@ class _MainPageState extends State<MainPage> {
   TextEditingController startTextController = TextEditingController();
   TextEditingController targetTextController = TextEditingController();
 
+  ScrollController _startScrollController = ScrollController();
+  ScrollController _targetScrollController = ScrollController();
+
   @override
   void initState() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -31,8 +34,6 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
-        //leading: const Icon(Icons.menu),
         centerTitle: true,
         ///APP BAR
         title: Row(
@@ -42,21 +43,21 @@ class _MainPageState extends State<MainPage> {
             SizedBox(
                 width: 80,
                 height: 30,
-                child: Text(code.isEnglish ? 'English' : 'Coded')),
+                child: Text(code.toEncode ? 'English' : 'Coded')),
             IconButton(
               icon: const Icon(
                 Icons.swap_horiz,
                 size: 30,
                 color: Colors.white,
               ),
-              onPressed: () {
-                code.swapLanguage();
+              onPressed: () async {
+                swapLanguage();
               },
             ),
             SizedBox(
                 width: 80,
                 height: 30,
-                child: Text(code.isEnglish ? 'Coded' : 'English')),
+                child: Text(code.toEncode ? 'Coded' : 'English')),
           ],
         ),
       ),
@@ -104,23 +105,26 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget getUpperTextField(){
-    return TextFormField(
-      controller: startTextController,
-      onChanged: (value) {
-        setState(() {});//brings icon
-      },
-      style: const TextStyle(
-        fontSize: 22,
-      ),
-      maxLines: 16,
-      cursorColor: Colors.blue,
-      cursorHeight: 30,
-      decoration:  const InputDecoration(
-        contentPadding: EdgeInsets.only(left: 10,right: 32),
-        border: InputBorder.none,
-        hintText: "Text",
-        //filled: true,
-        hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+    return Scrollbar(
+      controller: _startScrollController ,
+      child: TextFormField(
+        controller: startTextController,
+        onChanged: (value) {
+          setState(() {});//brings icon
+        },
+        style: const TextStyle(
+          fontSize: 22,
+        ),
+        maxLines: 200,
+        cursorColor: Colors.blue,
+        cursorHeight: 30,
+        decoration:  const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 10,right: 32),
+          border: InputBorder.none,
+          hintText: "Text",
+          //filled: true,
+          hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+        ),
       ),
     );
   }
@@ -129,27 +133,30 @@ class _MainPageState extends State<MainPage> {
     final code = Provider.of<CodeProvider>(context);
     targetTextController.text = code.targetText.isNotEmpty? code.targetText: '';
 
-    return TextFormField(
-      controller: targetTextController,
-      enabled: false,
-      style: const TextStyle(
-        fontSize: 22,
-      ),
-      maxLines: 16,
-      cursorColor: Colors.blue,
-      cursorHeight: 30,
-      decoration:  const InputDecoration(
-        //suffixIcon: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
-        contentPadding: EdgeInsets.only(left: 10, right: 32),
-        border: InputBorder.none,
-        //filled: true,
-        hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+    return Scrollbar(
+      controller: _targetScrollController,
+      child:  TextFormField(
+        controller: targetTextController,
+        enabled: false,
+        style:   const TextStyle(
+          fontSize: 22,
+        ),
+        maxLines: 100, //TODO: fix the height
+        cursorColor: Colors.blue,
+        cursorHeight: 30,
+        decoration:  const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 10, right: 32),
+          border: InputBorder.none,
+          //filled: true,
+          hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
+        ),
       ),
     );
 
   }
 
   Widget iconColumnWithoutText(){
+    final code = Provider.of<CodeProvider>(context);
     return Column(
       children: [
         IconButton(
@@ -157,14 +164,16 @@ class _MainPageState extends State<MainPage> {
             final value = await FlutterClipboard.paste();
             startTextController.text = value;
             startTextController.selection = TextSelection.fromPosition(TextPosition(offset: startTextController.text.length));
-            setState(() {
-              ///resolve issue for not having the 'iconColumnWithText' icons at the right as soon as something pasted in text field
-            });
+
+            await code.convert(startTextController.text);
+            targetTextController.text = code.targetText;
+            FocusScope.of(context).unfocus(); //removes keyboard after pressing enter
           },
           icon: const Icon(Icons.paste_rounded),
         ),
         IconButton(
           onPressed: () {
+            toast('voice is not activated now');
           },
           icon: const Icon(
             Icons.keyboard_voice,
@@ -192,6 +201,7 @@ class _MainPageState extends State<MainPage> {
         ),
         IconButton(
             onPressed: () {
+              toast('voice is not activated now');
             },
             icon: const Icon(
               Icons.keyboard_voice,
@@ -217,7 +227,6 @@ class _MainPageState extends State<MainPage> {
         IconButton(
           onPressed: ()async {
             await code.convert(startTextController.text);
-            //code.targetText = startTextController.text;
             targetTextController.text = code.targetText;
             FocusScope.of(context).unfocus(); //removes keyboard after pressing enter
           },
@@ -235,7 +244,7 @@ class _MainPageState extends State<MainPage> {
           builder: (context) {
             return IconButton(
               onPressed: () async {
-                await FlutterClipboard.copy(startTextController.text);
+                await FlutterClipboard.copy(targetTextController.text);
                 toast('copied');
               },
               icon: const Icon(Icons.copy_outlined),
@@ -258,7 +267,20 @@ class _MainPageState extends State<MainPage> {
   void toast(String message)=> Fluttertoast.showToast(
     msg: message,
     gravity: ToastGravity.CENTER,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.grey,
     textColor: Colors.black,
   );
+  void swapLanguage () async{
+    //final code = Provider.of<CodeProvider>(context); this line doesn't work
+    final code = Provider.of<CodeProvider>(context,listen: false);
+    code.swap();
+    String start = startTextController.text;
+    String target = targetTextController.text;
+
+    await code.convert(target);
+    targetTextController.text = code.targetText;
+    startTextController.text = start;
+    //startTextController.clear();
+
+  }
 }

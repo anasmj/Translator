@@ -14,7 +14,12 @@ class AppDrawer extends StatelessWidget {
           Stack(
             children: [
               Container(
-                color: Theme.of(context).primaryColor,
+                decoration: const BoxDecoration(
+                 gradient: LinearGradient(
+                   colors: [ Color(0xff3764b3) , Color(0xfd93764b3)],
+                 ),
+                ),
+                //color: Theme.of(context).primaryColor,
                 width: double.infinity,
                 height: 160,
               ),
@@ -25,18 +30,18 @@ class AppDrawer extends StatelessWidget {
             onTap: (){
               Navigator.pushNamed(context, "/settings");
             },
-            leading: const Icon(Icons.settings),
+            leading: const Icon(Icons.settings,),
             title: const Text(
               'Settings',style: TextStyle(fontSize: 16),
             ),
           ),
-           ListTile(
-            onTap: (){
-              Navigator.pushNamed(context, "/ascii_map");
-            },
-            leading: const Icon(Icons.map),
-            title: const Text('ASCII table',style: TextStyle(fontSize: 16),),
-          ),
+          //  ListTile(
+          //   onTap: (){
+          //     Navigator.pushNamed(context, "/ascii_table");
+          //   },
+          //   leading: const Icon(Icons.map),
+          //   title: const Text('ASCII table',style: TextStyle(fontSize: 16),),
+          // ),
            ListTile(
             onTap: (){
               Navigator.pushNamed(context, "/rate");
@@ -63,7 +68,7 @@ class AppDrawer extends StatelessWidget {
               callDeveloper();
             },
             leading: const Icon(Icons.face_rounded),
-            title: const Text('Thank me',style: TextStyle(fontSize: 16),),
+            title: const Text('Inform an issue',style: TextStyle(fontSize: 16),),
           ),
         ],
       ),
