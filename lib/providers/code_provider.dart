@@ -17,8 +17,8 @@ class CodeProvider with ChangeNotifier {
   }
 
   bool includePoint = false;
-  bool includeSpace=false;
-  bool includeComma =false;
+  bool includeSpace= false;
+  bool includeComma = false;
   bool includeSpecialCharacters = false;
 
 
@@ -32,6 +32,7 @@ class CodeProvider with ChangeNotifier {
   bool get toEncode => _toEncode;
   set toEncode(bool value) {
     _toEncode = value;
+
   }
 
   set targetText(String value) {
@@ -52,7 +53,7 @@ class CodeProvider with ChangeNotifier {
 
   Future<void> convert (String text,)async {
     try{
-      TextObject textObj = TextObject(startText: text, value: _value, toEncode: _toEncode, includePoint: includePoint, includeSpace: includeSpace, includeComma: includeComma,includeSpcialCharacters: includeSpecialCharacters );
+      TextObject textObj = TextObject(startText: text, value: _value, toEncode: _toEncode, includePoint: includePoint, includeSpace: includeSpace, includeComma: includeComma,includeSpecialCharacters: includeSpecialCharacters );
       targetText = textObj.convertText();
 
     }catch(e){

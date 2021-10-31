@@ -3,7 +3,7 @@ class TextObject{
 
   String startText;
   int value;
-  bool toEncode, includePoint,includeSpace,includeComma,includeSpcialCharacters;
+  bool toEncode, includePoint,includeSpace,includeComma,includeSpecialCharacters;
 
   String targetText = '';
   TextObject({
@@ -13,7 +13,7 @@ class TextObject{
     required this.includePoint,
     required this.includeSpace,
     required this.includeComma,
-    required this.includeSpcialCharacters,
+    required this.includeSpecialCharacters,
   });
   String convertText (){
 
@@ -30,29 +30,27 @@ class TextObject{
         if(targetList [i]==32 && !includeSpace){//fspace-32
           targetList [i] = targetList [i]-value;
         }
-        if(targetList [i]==44 && includeComma){//comma -44
+        if(targetList [i]==44 && !includeComma){//comma -44
           targetList [i] = targetList [i]-value;
         }
-        if(targetList.any((item) => specialCharacters.contains(item)) && includeSpcialCharacters){// by default special characters will not be converted
-          //targetList [i] = targetList [i]-value;
+        if(targetList.any((item) => specialCharacters.contains(item)) && !includeSpecialCharacters){// by default special characters will not be converted
+          targetList [i] = targetList [i]-value;
         }
         targetList [i] = toAscii[i]+value;
-
-        //print('$i: ${targetList[i]}');
       }
     }else{
       for (int i = 0 ; i< toAscii.length; i++){
         if(targetList [i]==46 && !includePoint){//full stop -46
-          targetList [i] = targetList [i]+value;
+          targetList [i] = targetList [i]+value; //maintain same value
         }
         if(targetList [i]==32 && !includeSpace){//fspace-32
           targetList [i] = targetList [i]+value;
         }
-        if(targetList [i]==44 && includeComma){//comma -44
+        if(targetList [i]==44 && !includeComma){//comma -44
           targetList [i] = targetList [i]+value;
         }
-        if(targetList.any((item) => specialCharacters.contains(item)) && includeSpcialCharacters){// by default special characters will not be converted
-          //targetList [i] = targetList [i]-value;
+        if(targetList.any((item) => specialCharacters.contains(item)) && includeSpecialCharacters){// by default special characters will not be converted
+          targetList [i] = targetList [i]+value;
         }
         targetList [i] = toAscii[i]-value;
       }

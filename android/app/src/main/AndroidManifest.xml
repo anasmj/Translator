@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.code_language">
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="code_language"
+        android:label="C O D E"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

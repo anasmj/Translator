@@ -45,8 +45,6 @@ class _SettingsState extends State<Settings> {
                 onChanged: (bool? value) {
                   setState(() {
                     code.includePoint = value!;
-                    // _fullStopCheck = value!;
-                      // code.includePoint = _fullStopCheck;
                   });
                 },
                 // activeColor:
@@ -77,6 +75,17 @@ class _SettingsState extends State<Settings> {
                 title: getTitle('Include other special characters'),
                 controlAffinity: ListTileControlAffinity.trailing,
                 value: code.includeSpecialCharacters,
+                subtitle: RichText(
+                  text: const TextSpan(
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    children: [
+                      TextSpan(text: 'e.g. ', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: '! # \$ % ^ & * ( ) + - '),
+
+                    ]
+                  ),
+                ),
+                //subtitle: const Text('i.e: ! # \$ % ^ & * ( ) + -  ',style: TextStyle(fontSize: 18),),
                 onChanged: (bool? value) {
                   setState(() {
                     code.includeSpecialCharacters = value!;

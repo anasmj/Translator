@@ -23,6 +23,7 @@ class Coder extends StatelessWidget{
   @override
   Widget build( BuildContext context){
     return MaterialApp(
+      title: 'C O D E',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffe1e3e8),
         primaryColor: appColor,

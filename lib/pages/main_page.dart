@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:code_language/providers/code_provider.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:share/share.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 
 class MainPage extends StatefulWidget {
@@ -17,6 +18,11 @@ class _MainPageState extends State<MainPage> {
   TextEditingController startTextController = TextEditingController();
   TextEditingController targetTextController = TextEditingController();
 
+  stt.SpeechToText? _speech;
+  bool _isListening = false;
+  String _text = 'press for listenning ';
+  double _confidance = 1.0;
+
   final ScrollController _startScrollController = ScrollController();
   final ScrollController _targetScrollController = ScrollController();
   final int minLIne = 16;
@@ -27,6 +33,7 @@ class _MainPageState extends State<MainPage> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       //code will run when widget rendering complete
     });
+    _speech = stt.SpeechToText();
     super.initState();
   }
   @override
@@ -180,7 +187,8 @@ class _MainPageState extends State<MainPage> {
         ),
         IconButton(
           onPressed: () {
-            toast('voice is not activated now');
+            toast('voice is not activated');
+            //_listen;
           },
           icon: const Icon(
             Icons.keyboard_voice,
@@ -275,7 +283,7 @@ class _MainPageState extends State<MainPage> {
   void toast(String message)=> Fluttertoast.showToast(
     msg: message,
     gravity: ToastGravity.CENTER,
-    backgroundColor: Colors.grey,
+    backgroundColor: Colors.white60,
     textColor: Colors.black,
   );
   void swapLanguage () async{
@@ -291,4 +299,26 @@ class _MainPageState extends State<MainPage> {
     //startTextController.clear();
 
   }
+  // void _listen()async {
+  //   if(!_isListening){
+  //     bool available = await _speech!.initialize(
+  //       onStatus: (val) => print('onStatus: $val'),
+  //       onError: (val) => print('onError: $val') ,
+  //     );
+  //     if(available){
+  //       setState(() => _isListening = true);
+  //       _speech!.listen(
+  //         onResult: (val) => setState(() {
+  //           _text = val.recognizedWords;
+  //           if(val.hasConfidenceRating && val.confidence>0){
+  //             _confidance = val.confidence;
+  //           }
+  //         }),
+  //       );
+  //     }
+  //   }else{
+  //     setState(() => _isListening = false);
+  //     _speech!.stop();
+  //   }
+  // }
 }
