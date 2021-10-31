@@ -1,5 +1,7 @@
+import 'package:code_language/providers/code_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:code_language/widgets/slider_dialog.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget{
   const Settings({Key? key}) : super(key: key);
@@ -9,13 +11,10 @@ class Settings extends StatefulWidget{
 }
 
 class _SettingsState extends State<Settings> {
-  bool _fullStopCheck = false;
-  bool _spaceBarCheck = false;
-  bool _commaCheck = false;
-  bool _otherSpecialCharacterCheck = false;
-
   @override
   Widget build (BuildContext context){
+    final code = Provider.of<CodeProvider>(context,listen: false);
+
     return WillPopScope(
       onWillPop: () {
         //Navigator.pushReplacementNamed(context, '/settings');
@@ -42,10 +41,12 @@ class _SettingsState extends State<Settings> {
               CheckboxListTile(
                 title: getTitle('Include full Stop'),
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: _fullStopCheck,
+                value: code.includePoint,
                 onChanged: (bool? value) {
                   setState(() {
-                      _fullStopCheck = value!;
+                    code.includePoint = value!;
+                    // _fullStopCheck = value!;
+                      // code.includePoint = _fullStopCheck;
                   });
                 },
                 // activeColor:
@@ -54,20 +55,20 @@ class _SettingsState extends State<Settings> {
               CheckboxListTile(
                 title: getTitle('Include space bar'),
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: _spaceBarCheck,
+                value: code.includeSpace,
                 onChanged: (bool? value) {
                   setState(() {
-                    _spaceBarCheck = value!;
+                    code.includeSpace = value!;
                   });
                 },
               ),
               CheckboxListTile(
                 title: getTitle('Include comma'),
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: _commaCheck,
+                value: code.includeComma,
                 onChanged: (bool? value) {
                   setState(() {
-                    _commaCheck = value!;
+                    code.includeComma = value!;
                   });
                 },
               ),
@@ -75,10 +76,10 @@ class _SettingsState extends State<Settings> {
               CheckboxListTile(
                 title: getTitle('Include other special characters'),
                 controlAffinity: ListTileControlAffinity.trailing,
-                value: _otherSpecialCharacterCheck,
+                value: code.includeSpecialCharacters,
                 onChanged: (bool? value) {
                   setState(() {
-                    _otherSpecialCharacterCheck = value!;
+                    code.includeSpecialCharacters = value!;
                   });
                 },
               ),

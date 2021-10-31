@@ -1,5 +1,7 @@
+import 'package:code_language/providers/code_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:code_language/widgets/picture_container.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -8,6 +10,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final code = Provider.of<CodeProvider>(context,listen: false);
+
     return Drawer(
       child: Column(
         children: [
@@ -29,6 +33,7 @@ class AppDrawer extends StatelessWidget {
            ListTile(
             onTap: (){
               Navigator.pushNamed(context, "/settings");
+              code.clearProviderTexts();
             },
             leading: const Icon(Icons.settings,),
             title: const Text(

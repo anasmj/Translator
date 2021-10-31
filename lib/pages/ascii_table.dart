@@ -5,7 +5,7 @@ class AsciiTable extends StatelessWidget{
   Widget build (BuildContext context){
     return Scaffold(
       appBar: AppBar(title: const Text('Ascii Table')),
-      body: Container(child: Image(image: AssetImage('assets/ascii.png'),)),
+      body: const Image(image: AssetImage('assets/ascii.png'),),
     );
   }
 }

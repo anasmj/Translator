@@ -17,8 +17,10 @@ class _MainPageState extends State<MainPage> {
   TextEditingController startTextController = TextEditingController();
   TextEditingController targetTextController = TextEditingController();
 
-  ScrollController _startScrollController = ScrollController();
-  ScrollController _targetScrollController = ScrollController();
+  final ScrollController _startScrollController = ScrollController();
+  final ScrollController _targetScrollController = ScrollController();
+  final int minLIne = 16;
+
 
   @override
   void initState() {
@@ -90,11 +92,17 @@ class _MainPageState extends State<MainPage> {
               color: Colors.white,
               child: Stack(
                 children: [
-                  SingleChildScrollView(child: getBottomTextField()),
+                  getBottomTextField(),
                   Align(
                     alignment: Alignment.centerRight,
                     child: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
                   )
+
+                  // SingleChildScrollView(child: getBottomTextField()),
+                  // Align(
+                  //   alignment: Alignment.centerRight,
+                  //   child: targetTextController.text.isEmpty ? Container(width: 0,): iconColumnForResult(),
+                  // )
                 ],
               ),
             ),
@@ -119,10 +127,9 @@ class _MainPageState extends State<MainPage> {
         cursorColor: Colors.blue,
         cursorHeight: 30,
         decoration:  const InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10,right: 32),
+          contentPadding: EdgeInsets.only(left: 10,top: 10,right: 32),
           border: InputBorder.none,
           hintText: "Text",
-          //filled: true,
           hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
         ),
       ),
@@ -137,15 +144,16 @@ class _MainPageState extends State<MainPage> {
       controller: _targetScrollController,
       child:  TextFormField(
         controller: targetTextController,
-        enabled: false,
+        readOnly: true,
         style:   const TextStyle(
           fontSize: 22,
         ),
-        maxLines: 100, //TODO: fix the height
+        //maxLines: startTextController.text.length < 300? 16: startTextController.text.length, //TODO: fix the height
+        maxLines: 10,
         cursorColor: Colors.blue,
         cursorHeight: 30,
         decoration:  const InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10, right: 32),
+          contentPadding: EdgeInsets.only(left: 10,top: 10, right: 32),
           border: InputBorder.none,
           //filled: true,
           hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
@@ -164,7 +172,6 @@ class _MainPageState extends State<MainPage> {
             final value = await FlutterClipboard.paste();
             startTextController.text = value;
             startTextController.selection = TextSelection.fromPosition(TextPosition(offset: startTextController.text.length));
-
             await code.convert(startTextController.text);
             targetTextController.text = code.targetText;
             FocusScope.of(context).unfocus(); //removes keyboard after pressing enter
@@ -190,7 +197,7 @@ class _MainPageState extends State<MainPage> {
       children: [
         IconButton(
           onPressed: () {
-            code.clearText();
+            code.clearProviderTexts();
             startTextController.clear();
             targetTextController.clear();
           },
@@ -202,6 +209,7 @@ class _MainPageState extends State<MainPage> {
         IconButton(
             onPressed: () {
               toast('voice is not activated now');
+              //TODO: to add voice functionality
             },
             icon: const Icon(
               Icons.keyboard_voice,
