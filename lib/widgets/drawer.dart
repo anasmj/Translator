@@ -32,7 +32,7 @@ class AppDrawer extends StatelessWidget {
           ),
            ListTile(
             onTap: (){
-              Navigator.pushNamed(context, "/settings");
+              Navigator.pushReplacementNamed(context, "/settings");
               code.clearProviderTexts();
             },
             leading: const Icon(Icons.settings,),
@@ -56,14 +56,14 @@ class AppDrawer extends StatelessWidget {
           ),
            ListTile(
             onTap: (){
-              Navigator.pushNamed(context, "/about_ascii");
+              Navigator.pushReplacementNamed(context, "/about_ascii");
             },
             leading: const Icon(Icons.description),
             title: const Text('About ASCII',style: TextStyle(fontSize: 16),),
           ),
            ListTile(
              onTap: (){
-               Navigator.pushNamed(context, "/privacy_policy");
+               Navigator.pushReplacementNamed(context, "/privacy_policy");
              },
             leading: const Icon(Icons.privacy_tip_outlined),
             title: const Text('Privacy Policy',style: TextStyle(fontSize: 16),),
