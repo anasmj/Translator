@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:code_language/providers/code_provider.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:share/share.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+//import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 
 class MainPage extends StatefulWidget {
@@ -17,11 +17,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   TextEditingController startTextController = TextEditingController();
   TextEditingController targetTextController = TextEditingController();
-
-  stt.SpeechToText? _speech;
-  bool _isListening = false;
-  String _text = 'press for listenning ';
-  double _confidance = 1.0;
+  //
+  // stt.SpeechToText? _speech;
+  // bool _isListening = false;
+  // String _text = 'press for listenning ';
+  // double _confidance = 1.0;
 
   final ScrollController _startScrollController = ScrollController();
   final ScrollController _targetScrollController = ScrollController();
@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       //code will run when widget rendering complete
     });
-    _speech = stt.SpeechToText();
+    // _speech = stt.SpeechToText();
     super.initState();
   }
   @override
@@ -49,10 +49,13 @@ class _MainPageState extends State<MainPage> {
           //mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            SizedBox(
-                width: 80,
-                height: 30,
-                child: Text(code.toEncode ? 'English' : 'Coded')),
+            GestureDetector(
+              onTap: ()async => swapLanguage(),
+              child: SizedBox(
+                  width: 80,
+                  height: 30,
+                  child: Text(code.toEncode ? 'English' : 'Coded')),
+            ),
             IconButton(
               icon: const Icon(
                 Icons.swap_horiz,
@@ -63,10 +66,13 @@ class _MainPageState extends State<MainPage> {
                 swapLanguage();
               },
             ),
-            SizedBox(
-                width: 80,
-                height: 30,
-                child: Text(code.toEncode ? 'Coded' : 'English')),
+            GestureDetector(
+              onTap: ()async => swapLanguage(),
+              child: SizedBox(
+                  width: 80,
+                  height: 30,
+                  child: Text(code.toEncode ? 'Coded' : 'English')),
+            ),
           ],
         ),
       ),

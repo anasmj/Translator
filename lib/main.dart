@@ -36,8 +36,8 @@ class Coder extends StatelessWidget{
       ),
 
       debugShowCheckedModeBanner: false,
-      //home: MainPage(),
-      initialRoute: '/main_page',
+      home: const MainPage(),
+      //initialRoute: '/main_page',
       routes: {
         '/main_page': (context) => const MainPage(),
         '/settings': (context) => const Settings(),

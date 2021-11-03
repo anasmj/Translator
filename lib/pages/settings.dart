@@ -15,17 +15,11 @@ class _SettingsState extends State<Settings> {
   Widget build (BuildContext context){
     final code = Provider.of<CodeProvider>(context,listen: false);
 
-    return WillPopScope(
-      onWillPop: () {
-        //Navigator.pushReplacementNamed(context, '/settings');
-        Navigator.popAndPushNamed(context, '/main_page');
-        throw 'error in setting page';
-      },
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(title: const Text('Settings')),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
+          child: ListView(
             children: [
                ListTile(
                 onTap: (){
@@ -95,8 +89,7 @@ class _SettingsState extends State<Settings> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
   Widget getTitle(String value){
     return Text(

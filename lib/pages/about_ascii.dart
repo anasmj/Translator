@@ -16,12 +16,7 @@ class AboutAscii extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: (){
-        Navigator.popAndPushNamed(context, '/main_page');
-        throw 'error in setting page';
-      },
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(title: const Text('About Ascii')),
         body: Padding(
           padding:  EdgeInsets.all(myPadding),
@@ -152,8 +147,8 @@ class AboutAscii extends StatelessWidget {
           ),
 
         ),
-      ),
-    );
+      );
+
   }
   Future browseSource () async{
     const String url = 'https://www.javatpoint.com/';
