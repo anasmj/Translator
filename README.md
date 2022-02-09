@@ -1,4 +1,4 @@
-# Translator interface 
+# Translator UI
 
 An interface for online translator
 
